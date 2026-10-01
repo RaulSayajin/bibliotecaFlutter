@@ -1,6 +1,6 @@
 {
-    "name": "bank",
-    "short_name": "bank",
+    "name": "Biblioteca",
+    "short_name": "Biblioteca",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

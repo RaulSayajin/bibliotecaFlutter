@@ -1,30 +1,27 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bank/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(BankApp());
+  testWidgets('Registra uma nova multa e exibe na lista', (tester) async {
+    await tester.pumpWidget(const BibliotecaApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.text('Multas da Biblioteca'), findsOneWidget);
+    expect(find.byType(Card), findsNWidgets(2));
 
-    // Tap the '+' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.enterText(find.byType(TextField).at(0), '202499');
+    await tester.enterText(find.byType(TextField).at(1), '7,30');
+    await tester.tap(find.text('Registrar'));
+    await tester.pumpAndSettle();
+
+    // O novo item só aparece depois do atraso de 1 segundo.
+    expect(find.text('Matrícula: 202499'), findsNothing);
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('Matrícula: 202499'), findsOneWidget);
+    expect(find.textContaining('7,30'), findsOneWidget);
   });
 }
